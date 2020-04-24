@@ -191,11 +191,7 @@ export default function NavBar() {
                 </Link>
               </IconButton>
             )}
-            {user.sid && (
-              <MenuItem>
-                <Button href='/auth/logout'>Logout</Button>
-              </MenuItem>
-            )}
+            {user.sid && <Button href='/auth/logout'>Logout</Button>}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
