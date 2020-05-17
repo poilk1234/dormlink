@@ -136,5 +136,9 @@ export default () => {
     <UserCard key={sid} sid={sid} gender={gender} age={age} />
   ));
 
-  return userCards;
+  return data.similar.length ? (
+    userCards
+  ) : (
+    <div>No student from your hostel has registered right now</div>
+  );
 };
