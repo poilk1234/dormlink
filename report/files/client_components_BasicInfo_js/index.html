@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - client/components/BasicInfo.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>client/components/BasicInfo.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">70.54</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">136</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">16.22</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.77</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import React from &#039;react&#039;;
+import { makeStyles, withStyles } from &#039;@material-ui/core/styles&#039;;
+import Container from &#039;@material-ui/core/Container&#039;;
+import Radio from &#039;@material-ui/core/Radio&#039;;
+import RadioGroup from &#039;@material-ui/core/RadioGroup&#039;;
+import FormControlLabel from &#039;@material-ui/core/FormControlLabel&#039;;
+import FormControl from &#039;@material-ui/core/FormControl&#039;;
+import FormLabel from &#039;@material-ui/core/FormLabel&#039;;
+import TextField from &#039;@material-ui/core/TextField&#039;;
+import Select from &#039;@material-ui/core/Select&#039;;
+import MenuItem from &#039;@material-ui/core/MenuItem&#039;;
+import Autocomplete from &#039;@material-ui/lab/Autocomplete&#039;;
+import { hostelInfo as options } from &#039;../utils/constants&#039;;
+
+/* Custom container for BasicInfo selection component */
+const InfoContainer = withStyles({
+  root: {
+    justifyContent: &#039;center&#039;,
+    padding: &#039;3vh&#039;,
+    backgroundColor: &#039;#e1e3dd&#039;,
+    borderRadius: &#039;25px&#039;,
+    width: &#039;70%&#039;
+  }
+})(Container);
+
+/* Custom styles for BasicInfo selection component */
+const useStyles = makeStyles(theme =&gt; ({
+  formControl: {
+    margin: theme.spacing(3),
+    marginBottom: theme.spacing(1),
+    minWidth: &#039;80%&#039;
+  },
+  formControlText: {
+    width: &#039;80%&#039;,
+    margin: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  },
+  formLabel: {
+    color: &#039;#000&#039;,
+    &#039;&amp;.Mui-focused&#039;: {
+      color: &#039;#000&#039;
+    },
+    marginBottom: theme.spacing(1)
+  },
+  select: {
+    minWidth: &#039;80%&#039;
+  },
+  autoComplete: {
+    minWidth: &#039;50%&#039;,
+    maxWidth: &#039;100%&#039;
+  }
+}));
+
+/* BasicInfo form can be passed values for initial and updated state and onChange function */
+/* This allows shared state between this component and its parent, RegistrationPage.js */
+export default function RadioButtonsGroup({ value, onChange, child }) {
+  const classes = useStyles();
+
+  /* Render form with Radio groups for basic info properties */
+  /* Gender, Age, Hostel */
+  return (
+    &lt;InfoContainer maxWidth=&#039;xl&#039;&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          Gender
+        &lt;/FormLabel&gt;
+        &lt;RadioGroup row name=&#039;gender&#039; value={value.gender} onChange={onChange}&gt;
+          &lt;FormControlLabel
+            value=&#039;female&#039;
+            control={&lt;Radio color=&#039;primary&#039; /&gt;}
+            label=&#039;Female&#039;
+          /&gt;
+          &lt;FormControlLabel
+            value=&#039;male&#039;
+            control={&lt;Radio color=&#039;primary&#039; /&gt;}
+            label=&#039;Male&#039;
+          /&gt;
+          &lt;FormControlLabel
+            value=&#039;other&#039;
+            control={&lt;Radio color=&#039;primary&#039; /&gt;}
+            label=&#039;Other&#039;
+          /&gt;
+        &lt;/RadioGroup&gt;
+      &lt;/FormControl&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          Age
+        &lt;/FormLabel&gt;
+        &lt;Select
+          name=&#039;age&#039;
+          classes={{ root: classes.select }}
+          value={value.age}
+          onChange={onChange}
+        &gt;
+          &lt;MenuItem value={16}&gt;16&lt;/MenuItem&gt;
+          &lt;MenuItem value={17}&gt;17&lt;/MenuItem&gt;
+          &lt;MenuItem value={18}&gt;18&lt;/MenuItem&gt;
+          &lt;MenuItem value={19}&gt;19&lt;/MenuItem&gt;
+          &lt;MenuItem value={20}&gt;20&lt;/MenuItem&gt;
+          &lt;MenuItem value={21}&gt;21&lt;/MenuItem&gt;
+          &lt;MenuItem value={22}&gt;22&lt;/MenuItem&gt;
+          &lt;MenuItem value={23}&gt;23&lt;/MenuItem&gt;
+          &lt;MenuItem value={24}&gt;24&lt;/MenuItem&gt;
+          &lt;MenuItem value={25}&gt;25&lt;/MenuItem&gt;
+          &lt;MenuItem value={26}&gt;26&lt;/MenuItem&gt;
+        &lt;/Select&gt;
+      &lt;/FormControl&gt;
+      &lt;FormControl
+        component=&#039;fieldset&#039;
+        classes={{ root: classes.formControlText }}
+      &gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          Hostel
+        &lt;/FormLabel&gt;
+        &lt;Autocomplete
+          classes={{ root: classes.autoComplete }}
+          autoComplete
+          options={options.sort((a, b) =&gt; (a.name.attr &gt; b.name.attr ? 1 : -1))}
+          groupBy={option =&gt; option.affiliation}
+          getOptionLabel={option =&gt; option.name}
+          renderInput={params =&gt; (
+            &lt;TextField {...params} label={value.hostel} variant=&#039;outlined&#039; /&gt;
+          )}
+          onChange={(event, text) =&gt; {
+            if (text) {
+              const obj = { target: { name: &#039;hostel&#039;, value: text.name } };
+              onChange(obj);
+            }
+          }}
+        /&gt;
+      &lt;/FormControl&gt;
+      {child}
+    &lt;/InfoContainer&gt;
+  );
+}
+</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - client/pages/RegistrationPage.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>client/pages/RegistrationPage.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">65.37</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">263</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">34.71</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.75</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import React, { useContext } from &#039;react&#039;;
+import Redirect from &#039;react-router-dom/es/Redirect&#039;;
+import Step from &#039;@material-ui/core/Step&#039;;
+import StepLabel from &#039;@material-ui/core/StepLabel&#039;;
+import Stepper from &#039;@material-ui/core/Stepper&#039;;
+import Button from &#039;@material-ui/core/Button&#039;;
+import Alert from &#039;@material-ui/lab/Alert&#039;;
+import Typography from &#039;@material-ui/core/Typography&#039;;
+import { useQuery, useMutation } from &#039;@apollo/react-hooks&#039;;
+import { makeStyles } from &#039;@material-ui/core/styles&#039;;
+import useFormFields from &#039;../hooks/useFormFields&#039;;
+import { UserContext } from &#039;../contexts/UserProvider&#039;;
+import {
+  UPDATE_USER,
+  STUDENT,
+  MERGE_STUDENT,
+  ADD_TRAIT_STUDENT_TRAITS,
+  UPDATE_STUDENT,
+  UPDATE_TRAIT_STUDENT_TRAITS
+} from &#039;../utils/gqlQueries&#039;;
+import BasicInfo from &#039;../components/BasicInfo&#039;;
+import Preferences from &#039;../components/Preferences&#039;;
+
+/* Create custom styling for RegistrationPage */
+const useStyles = makeStyles(theme =&gt; ({
+  root: {
+    width: &#039;100%&#039;,
+    height: &#039;75%&#039;
+  },
+  buttonLayout: {
+    display: &#039;flex&#039;,
+    justifyContent: &#039;flex-end&#039;,
+    paddingLeft: &#039;25%&#039;,
+    paddingRight: &#039;25%&#039;
+  },
+  stepper: {
+    backgroundColor: &#039;transparent&#039;
+  },
+  button: {
+    margin: theme.spacing(2),
+    width: theme.spacing(5)
+  },
+  instructions: {
+    textAlign: &#039;center&#039;,
+    marginBottom: theme.spacing(2)
+  }
+}));
+
+/* List of steps to iterate through in order to complete registration */
+function getSteps() {
+  return [&#039;Basic Info&#039;, &#039;Interests and Preferences&#039;, &#039;Submit&#039;];
+}
+
+/* List of step instructions */
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return &#039;Tell us who you are!&#039;;
+    case 1:
+      return &#039;Are you...&#039;;
+    case 2:
+      return &quot;You&#039;re all done!&quot;;
+    default:
+      return &#039;Unknown step&#039;;
+  }
+}
+
+/* Default fields for user preferences */
+const defaultFormFields = {
+  schedule: 50,
+  cleanliness: 50,
+  participation: 50,
+  studious: 50
+};
+
+/* Page to edit profile options extends registration page */
+export function EditPage() {
+  const [user, setUser] = useContext(UserContext);
+  const { data, error, loading } = useQuery(STUDENT, {
+    variables: { sid: user.sid.toString() }
+  });
+
+  /* Check for complete profile */
+  if (!user.isComplete) return &lt;Redirect to=&#039;/register&#039; /&gt;;
+
+  /* Handle GraphQL server responses */
+  if (loading) return &lt;p&gt;Loading...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error :(&lt;/p&gt;;
+  if (!data) return &lt;p&gt;Not found&lt;/p&gt;;
+
+  /* Return RegistrationPage with special (editing) props */
+  return (
+    &lt;RegistrationPage
+      formFields={{
+        gender: data.Student[0].gender,
+        age: data.Student[0].age,
+        hostel: data.Student[0].hostel,
+        schedule: user.schedule,
+        cleanliness: user.cleanliness,
+        participation: user.participation,
+        studious: user.studious
+      }}
+      isEditing={true}
+    /&gt;
+  );
+}
+
+export function RegistrationPage(props) {
+  /* Define custom styles for RegistrationPage */
+  const classes = useStyles();
+
+  /* Define registration steps */
+  const steps = getSteps();
+
+  /* Implement GraphQL hooks from gqlQueries.js */
+  const [UpdateUser] = useMutation(UPDATE_USER);
+  const [MergeStudent] = useMutation(MERGE_STUDENT);
+  const [AddTraitStudentTraits] = useMutation(ADD_TRAIT_STUDENT_TRAITS);
+  const [UpdateStudent] = useMutation(UPDATE_STUDENT);
+  const [UpdateTraitStudentTraits] = useMutation(UPDATE_TRAIT_STUDENT_TRAITS);
+
+  /* Access userContext */
+  const [user, setUser] = useContext(UserContext);
+
+  /* Validate field inputs using React state */
+  const [missingField, setMissingField] = React.useState(false);
+
+  /* Set active step of process to 0 using React state */
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  /* Check for completion using redirect state */
+  const [redirect, setRedirect] = React.useState(
+    user.isComplete &amp;&amp; !props.isEditing
+  );
+
+  /* Implement custom useFormFields hook to handle user selections during Registration/Editing */
+  const [fieldsFilled, updateFields] = useFormFields(
+    props.formFields ? props.formFields : defaultFormFields
+  );
+
+  /* Handle required updates of Neo4j nodes and edges for EditPage */
+  const UpdateNeo4jNode = props.isEditing ? UpdateStudent : MergeStudent;
+  const UpdateNeo4jEdge = props.isEditing
+    ? UpdateTraitStudentTraits
+    : AddTraitStudentTraits;
+
+  /* Render appropriate form pages upon click of next-button */
+  const handleNext = () =&gt; {
+    if (
+      activeStep !== 0 ||
+      (fieldsFilled.hostel &amp;&amp; fieldsFilled.age &amp;&amp; fieldsFilled.gender)
+    ) {
+      setMissingField(false);
+      return setActiveStep(prevActiveStep =&gt; prevActiveStep + 1);
+    } else {
+      setMissingField(true);
+    }
+  };
+
+  /* Render appropriate form pages upon click of back-button */
+  const handleBack = () =&gt; setActiveStep(prevActiveStep =&gt; prevActiveStep - 1);
+
+  /* Handle async operation of submitting all selected preferences to GraphQL server upon finish */
+  /* Every GraphQL call uses parameterized queries for security purposes */
+  const handleSubmit = () =&gt; {
+    UpdateUser({
+      variables: {
+        sid: user.sid,
+        hostel: fieldsFilled.hostel,
+        schedule: fieldsFilled.schedule,
+        cleanliness: fieldsFilled.cleanliness,
+        participation: fieldsFilled.participation,
+        studious: fieldsFilled.studious
+      }
+    })
+      .then(async () =&gt; {
+        await UpdateNeo4jNode({
+          variables: {
+            sid: user.sid,
+            hostel: fieldsFilled.hostel,
+            age: fieldsFilled.age,
+            gender: fieldsFilled.gender
+          }
+        });
+        Object.keys(fieldsFilled).map(async key =&gt; {
+          if (key !== &#039;gender&#039; &amp;&amp; key !== &#039;age&#039; &amp;&amp; key !== &#039;hostel&#039;)
+            await UpdateNeo4jEdge({
+              variables: {
+                from: { sid: user.sid },
+                to: { name: `${key}` },
+                data: { strength: fieldsFilled[key] }
+              }
+            });
+        });
+      })
+      .then(async () =&gt; {
+        setRedirect(true);
+      });
+  };
+
+  if (redirect === true) {
+    /* Update userContext for entire application upon new submission of updated preferences */
+    setUser({ ...user, update: true });
+
+    /* Redirect back to Home */
+    return &lt;Redirect to=&#039;/&#039; /&gt;;
+  }
+
+  /* Render stepper and BasicInfo.js or Preferences.js components depending on current step */
+  return (
+    &lt;div className={classes.root}&gt;
+      &lt;Stepper classes={{ root: classes.stepper }} activeStep={activeStep}&gt;
+        {steps.map(label =&gt; {
+          return (
+            &lt;Step key={label}&gt;
+              &lt;StepLabel&gt;{label}&lt;/StepLabel&gt;
+            &lt;/Step&gt;
+          );
+        })}
+      &lt;/Stepper&gt;
+      &lt;div&gt;
+        &lt;div className={classes.instructions}&gt;
+          &lt;Typography variant=&#039;h5&#039;&gt;{getStepContent(activeStep)}&lt;/Typography&gt;
+        &lt;/div&gt;
+        {activeStep === 0 &amp;&amp; (
+          &lt;BasicInfo
+            value={fieldsFilled}
+            onChange={updateFields}
+            child={
+              missingField &amp;&amp; (
+                &lt;Alert severity=&#039;error&#039;&gt;Some field are missing.&lt;/Alert&gt;
+              )
+            }
+          /&gt;
+        )}
+        {activeStep === 1 &amp;&amp; (
+          &lt;Preferences value={fieldsFilled} onChange={updateFields} /&gt;
+        )}
+        &lt;div className={classes.buttonLayout}&gt;
+          &lt;Button
+            variant=&#039;contained&#039;
+            className={classes.button}
+            disabled={activeStep === 0}
+            onClick={handleBack}
+          &gt;
+            Back
+          &lt;/Button&gt;
+          &lt;Button
+            variant=&#039;contained&#039;
+            color=&#039;primary&#039;
+            onClick={
+              activeStep === steps.length - 1 ? handleSubmit : handleNext
+            }
+            className={classes.button}
+          &gt;
+            {activeStep === steps.length - 1 ? &#039;Submit&#039; : &#039;Next&#039;}
+          &lt;/Button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

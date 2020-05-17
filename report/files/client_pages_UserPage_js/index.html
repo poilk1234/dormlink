@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - client/pages/UserPage.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>client/pages/UserPage.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">63.37</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">129</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">18.19</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.78</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import React, { useContext } from &#039;react&#039;;
+import { useParams } from &#039;react-router-dom&#039;;
+import ProfilePage from &#039;./ProfilePage&#039;;
+import { UserContext } from &#039;../contexts/UserProvider&#039;;
+import { useQuery } from &#039;@apollo/react-hooks&#039;;
+import { USER_SID } from &#039;../utils/gqlQueries&#039;;
+import Typography from &#039;@material-ui/core/Typography&#039;;
+import Avatar from &#039;@material-ui/core/Avatar&#039;;
+import List from &#039;@material-ui/core/List&#039;;
+import ListItem from &#039;@material-ui/core/ListItem&#039;;
+import ListItemAvatar from &#039;@material-ui/core/ListItemAvatar&#039;;
+import FaceIcon from &#039;@material-ui/icons/Face&#039;;
+import { makeStyles } from &#039;@material-ui/core/styles&#039;;
+import ListItemText from &#039;@material-ui/core/ListItemText&#039;;
+import Redirect from &#039;react-router-dom/es/Redirect&#039;;
+
+/* User defined preferences */
+const fieldsToShow = [
+  &#039;email&#039;,
+  &#039;schedule&#039;,
+  &#039;cleanliness&#039;,
+  &#039;participation&#039;,
+  &#039;studious&#039;,
+  &#039;hostelId&#039;
+];
+
+/* Available selections */
+const levels = {
+  0: &#039;⭐&#039;,
+  25: &#039;⭐⭐&#039;,
+  50: &#039;⭐⭐⭐&#039;,
+  75: &#039;⭐⭐⭐⭐&#039;,
+  100: &#039;⭐⭐⭐⭐⭐&#039;
+};
+
+/* Word-mapping descriptors */
+const keyMaps = {
+  schedule: &#039;Night Owl&#039;,
+  cleanliness: &#039;Cleanliness&#039;,
+  participation: &#039;Social&#039;,
+  studious: &#039;Studious&#039;
+};
+
+/* Define custom styles for UserPage */
+const useStyles = makeStyles(theme =&gt; ({
+  root: {
+    flexGrow: 1,
+    maxWidth: 752
+  },
+  demo: {
+    backgroundColor: &#039;#e1e3dd&#039;,
+    margin: &#039;auto&#039;
+  },
+  title: {
+    textAlign: &#039;center&#039;
+  }
+}));
+
+/* isNull(object) function */
+const isNull = obj =&gt; {
+  return typeof obj == &#039;undefined&#039; || obj === null;
+};
+
+export default () =&gt; {
+  /* Implement useParams hook and custom userContext context */
+  const { sid } = useParams();
+  const [user, setUser] = useContext(UserContext);
+
+  /* Provide sid to parameterized query (prevent SQL injections) */
+  const { data, error, loading } = useQuery(USER_SID, {
+    variables: { sid: sid }
+  });
+
+  /* Use page styles */
+  const classes = useStyles();
+
+  /* Check for account completion and redirect accordingly */
+  if (!user.isComplete) return &lt;Redirect to=&#039;/register&#039; /&gt;;
+
+  /* Check param sid against userContext to prevent unauthorized access */
+  if (sid === user.sid) {
+    return &lt;ProfilePage /&gt;;
+  }
+
+  /* Handle GraphQL return types */
+  if (loading) return &lt;p&gt;Loading...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error :(&lt;/p&gt;;
+  if (!data) return &lt;p&gt;Not found&lt;/p&gt;;
+  if (!data.userSid) return &lt;p&gt;User Not Found&lt;/p&gt;;
+
+  data.userSid.hostelId = data.userSid.hostel.id;
+
+  /* Render list of user profile information */
+  return (
+    &lt;div&gt;
+      &lt;Typography variant=&#039;h6&#039; classes={{ root: classes.title }}&gt;
+        {data.userSid.firstName +
+          &#039; &#039; +
+          data.userSid.lastName +
+          &quot;&#039;s Profile Summary&quot;}
+      &lt;/Typography&gt;
+      &lt;List classes={{ root: classes.demo }} dense&gt;
+        {fieldsToShow.map(key =&gt; (
+          &lt;ListItem&gt;
+            &lt;ListItemAvatar&gt;
+              &lt;Avatar&gt;
+                &lt;FaceIcon /&gt;
+              &lt;/Avatar&gt;
+            &lt;/ListItemAvatar&gt;
+            &lt;ListItemText
+              primary={isNull(keyMaps[key]) ? key : keyMaps[key]}
+              style={{ width: &#039;20%&#039; }}
+            /&gt;
+            &lt;ListItemText
+              primary={
+                isNull(data.userSid[key])
+                  ? &#039;Unknown&#039;
+                  : isNull(levels[data.userSid[key]])
+                  ? data.userSid[key]
+                  : levels[data.userSid[key]]
+              }
+            /&gt;
+          &lt;/ListItem&gt;
+        ))}
+      &lt;/List&gt;
+    &lt;/div&gt;
+  );
+};
+</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - client/components/NavBar.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>client/components/NavBar.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">56.50</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">215</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">15.94</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.21</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import React, { useContext } from &#039;react&#039;;
+import { Link } from &#039;react-router-dom&#039;;
+import Button from &#039;@material-ui/core/Button&#039;;
+import { fade, withStyles, makeStyles } from &#039;@material-ui/core/styles&#039;;
+import AppBar from &#039;@material-ui/core/AppBar&#039;;
+import Toolbar from &#039;@material-ui/core/Toolbar&#039;;
+import IconButton from &#039;@material-ui/core/IconButton&#039;;
+import MenuItem from &#039;@material-ui/core/MenuItem&#039;;
+import Menu from &#039;@material-ui/core/Menu&#039;;
+import Avatar from &#039;@material-ui/core/Avatar&#039;;
+import AccountCircle from &#039;@material-ui/icons/AccountCircle&#039;;
+import MoreIcon from &#039;@material-ui/icons/MoreVert&#039;;
+import InfoIcon from &#039;@material-ui/icons/Info&#039;;
+import HomeIcon from &#039;@material-ui/icons/Home&#039;;
+import MeetingRoomIcon from &#039;@material-ui/icons/MeetingRoom&#039;;
+import { UserContext } from &#039;../contexts/UserProvider&#039;;
+import avatar from &#039;../../../public/avatar.jpg&#039;;
+
+/* Custom transparentAppBar component */
+const transparentAppBar = withStyles({
+  root: {
+    background: &#039;transparent&#039;,
+    boxShadow: &#039;none&#039;
+  }
+})(AppBar);
+
+/* More custom styling for NavBar */
+const useStyles = makeStyles(theme =&gt; ({
+  grow: {
+    flexGrow: 1
+  },
+  title: {
+    display: &#039;none&#039;,
+    [theme.breakpoints.up(&#039;sm&#039;)]: {
+      display: &#039;block&#039;
+    }
+  },
+  search: {
+    position: &#039;relative&#039;,
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    &#039;&amp;:hover&#039;: {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: &#039;100%&#039;,
+    [theme.breakpoints.up(&#039;sm&#039;)]: {
+      marginLeft: theme.spacing(6),
+      width: &#039;auto&#039;
+    }
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: &#039;100%&#039;,
+    position: &#039;absolute&#039;,
+    pointerEvents: &#039;none&#039;,
+    display: &#039;flex&#039;,
+    alignItems: &#039;center&#039;,
+    justifyContent: &#039;center&#039;
+  },
+  avatar: {
+    color: &#039;#67c97a&#039;
+  },
+  inputRoot: {
+    color: &#039;inherit&#039;
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create(&#039;width&#039;),
+    width: &#039;100%&#039;,
+    [theme.breakpoints.up(&#039;md&#039;)]: {
+      width: &#039;20ch&#039;
+    }
+  },
+  sectionDesktop: {
+    display: &#039;none&#039;,
+    [theme.breakpoints.up(&#039;md&#039;)]: {
+      display: &#039;flex&#039;
+    }
+  },
+  sectionMobile: {
+    display: &#039;flex&#039;,
+    [theme.breakpoints.up(&#039;md&#039;)]: {
+      display: &#039;none&#039;
+    }
+  }
+}));
+
+export default function NavBar() {
+  /* Define custom styles for Navigation Bar */
+  const classes = useStyles();
+
+  /* Implement anchor elements for mobile friendly hamburger menu */
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [user, setUser] = useContext(UserContext);
+
+  /* Handle mobile viewport hamburger menu */
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  /* MobileMenuClose handler */
+  const handleMobileMenuClose = () =&gt; {
+    setMobileMoreAnchorEl(null);
+  };
+
+  /* MobileMenuOpen handler */
+  const handleMobileMenuOpen = event =&gt; {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  /* Render menu for desktop viewport */
+  const menuId = &#039;primary-search-account-menu&#039;;
+  const renderMenu = (
+    &lt;Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: &#039;top&#039;, horizontal: &#039;right&#039; }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: &#039;top&#039;, horizontal: &#039;right&#039; }}
+    /&gt;
+  );
+
+  /* Render menu for mobile viewport */
+  const mobileMenuId = &#039;primary-search-account-menu-mobile&#039;;
+  const renderMobileMenu = (
+    &lt;Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: &#039;top&#039;, horizontal: &#039;right&#039; }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: &#039;top&#039;, horizontal: &#039;right&#039; }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    &gt;
+      &lt;MenuItem&gt;
+        &lt;Button href=&#039;/&#039;&gt;
+          &lt;IconButton&gt;
+            &lt;HomeIcon /&gt;
+          &lt;/IconButton&gt;
+          &lt;p&gt;Homepage&lt;/p&gt;
+        &lt;/Button&gt;
+      &lt;/MenuItem&gt;
+      &lt;MenuItem&gt;
+        &lt;Button href=&#039;/about&#039;&gt;
+          &lt;IconButton&gt;
+            &lt;InfoIcon /&gt;
+          &lt;/IconButton&gt;
+          &lt;p&gt;About us&lt;/p&gt;
+        &lt;/Button&gt;
+      &lt;/MenuItem&gt;
+      {user.isComplete &amp;&amp; (
+        &lt;MenuItem&gt;
+          &lt;Button href=&#039;/profile&#039;&gt;
+            &lt;IconButton&gt;
+              &lt;AccountCircle /&gt;
+            &lt;/IconButton&gt;
+            &lt;p&gt;Profile&lt;/p&gt;
+          &lt;/Button&gt;
+        &lt;/MenuItem&gt;
+      )}
+      {user.sid &amp;&amp; (
+        &lt;MenuItem&gt;
+          &lt;Button href=&#039;/auth/logout&#039;&gt;
+            &lt;IconButton&gt;
+              &lt;MeetingRoomIcon /&gt;
+            &lt;/IconButton&gt;
+            &lt;p&gt;Logout&lt;/p&gt;
+          &lt;/Button&gt;
+        &lt;/MenuItem&gt;
+      )}
+    &lt;/Menu&gt;
+  );
+
+  /* Use conditional rendering to hide profile tab if not logged in, alongside other irrelevant information */
+  return (
+    &lt;div className={classes.grow}&gt;
+      &lt;transparentAppBar position=&#039;static&#039;&gt;
+        &lt;Toolbar&gt;
+          &lt;div className={classes.sectionDesktop}&gt;
+            &lt;Button className={classes.title} variant=&#039;h6&#039; href=&#039;/&#039;&gt;
+              DormLink
+            &lt;/Button&gt;
+          &lt;/div&gt;
+          &lt;div className={classes.grow} /&gt;
+          &lt;div className={classes.sectionDesktop}&gt;
+            &lt;Button href=&#039;/about&#039;&gt;About Us&lt;/Button&gt;
+            {user.isComplete &amp;&amp; (
+              &lt;IconButton edge=&#039;end&#039; aria-controls={menuId} color=&#039;inherit&#039;&gt;
+                &lt;Link to=&#039;/profile&#039;&gt;
+                  &lt;Avatar classes={{ root: classes.avatarRoot }} src={avatar} /&gt;
+                &lt;/Link&gt;
+              &lt;/IconButton&gt;
+            )}
+            {user.sid &amp;&amp; &lt;Button href=&#039;/auth/logout&#039;&gt;Logout&lt;/Button&gt;}
+          &lt;/div&gt;
+          &lt;div className={classes.sectionMobile}&gt;
+            &lt;IconButton
+              aria-controls={mobileMenuId}
+              onClick={handleMobileMenuOpen}
+              color=&#039;inherit&#039;
+            &gt;
+              &lt;MoreIcon /&gt;
+            &lt;/IconButton&gt;
+          &lt;/div&gt;
+        &lt;/Toolbar&gt;
+      &lt;/transparentAppBar&gt;
+      {renderMobileMenu}
+      {renderMenu}
+    &lt;/div&gt;
+  );
+}
+</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

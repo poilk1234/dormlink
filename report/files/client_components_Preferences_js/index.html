@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - client/components/Preferences.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>client/components/Preferences.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">68.22</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">146</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">18.41</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.73</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import React from &#039;react&#039;;
+import { makeStyles, withStyles } from &#039;@material-ui/core/styles&#039;;
+import Container from &#039;@material-ui/core/Container&#039;;
+import Slider from &#039;@material-ui/core/Slider&#039;;
+import FormControl from &#039;@material-ui/core/FormControl&#039;;
+import FormLabel from &#039;@material-ui/core/FormLabel&#039;;
+
+/* Custom container component for Preference selection component */
+const InfoContainer = withStyles({
+  root: {
+    justifyContent: &#039;center&#039;,
+    padding: &#039;3vh&#039;,
+    backgroundColor: &#039;#e1e3dd&#039;,
+    borderRadius: &#039;25px&#039;,
+    width: &#039;70%&#039;
+  }
+})(Container);
+
+/* Custom styles for Preference selection component */
+const useStyles = makeStyles(theme =&gt; ({
+  formControl: {
+    margin: theme.spacing(3),
+    minWidth: &#039;70%&#039;,
+    marginBottom: theme.spacing(1),
+    display: &#039;block&#039;
+  },
+  formControlText: {
+    width: &#039;80%&#039;,
+    margin: theme.spacing(2)
+  },
+  formLabel: {
+    color: &#039;#000&#039;,
+    &#039;&amp;.Mui-focused&#039;: {
+      color: &#039;#000&#039;
+    }
+  }
+}));
+
+/* Mappings between values and descriptors */
+const levels = [
+  {
+    value: 0,
+    label: &#039;No Way&#039;
+  },
+  {
+    value: 25,
+    label: &#039;&#039;
+  },
+  {
+    value: 50,
+    label: &#039;Sometimes&#039;
+  },
+  {
+    value: 75,
+    label: &#039;&#039;
+  },
+  {
+    value: 100,
+    label: &#039;Definitely&#039;
+  }
+];
+
+function valuetext(value) {
+  return `${value}`;
+}
+
+/* Preferences component can be passed initial and changed values and onChange function */
+/* onChange allows for updated values to be passed to parent form in RegistrationPage.js */
+export default function RadioButtonsGroup({ value, onChange }) {
+  const classes = useStyles();
+
+  /* Render custom form with slider for each preference */
+  /* Pass every change to parent form */
+  return (
+    &lt;InfoContainer maxWidth=&#039;xl&#039;&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          A Night Owl?
+        &lt;/FormLabel&gt;
+        &lt;Slider
+          defaultValue={value.schedule}
+          onChangeCommitted={(event, num) =&gt; {
+            const obj = { target: { name: &#039;schedule&#039;, value: num } };
+            onChange(obj);
+          }}
+          getAriaValueText={valuetext}
+          aria-labelledby=&#039;discrete-slider-custom&#039;
+          step={25}
+          valueLabelDisplay=&#039;off&#039;
+          marks={levels}
+        /&gt;
+      &lt;/FormControl&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          A Neat Freak?
+        &lt;/FormLabel&gt;
+        &lt;Slider
+          defaultValue={value.cleanliness}
+          onChangeCommitted={(event, num) =&gt; {
+            const obj = { target: { name: &#039;cleanliness&#039;, value: num } };
+            onChange(obj);
+          }}
+          getAriaValueText={valuetext}
+          step={25}
+          valueLabelDisplay=&#039;off&#039;
+          marks={levels}
+        /&gt;
+      &lt;/FormControl&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          An Active Community Member?
+        &lt;/FormLabel&gt;
+        &lt;Slider
+          defaultValue={value.participation}
+          onChangeCommitted={(event, num) =&gt; {
+            const obj = { target: { name: &#039;participation&#039;, value: num } };
+            onChange(obj);
+          }}
+          getAriaValueText={valuetext}
+          aria-labelledby=&#039;discrete-slider-custom&#039;
+          step={25}
+          valueLabelDisplay=&#039;off&#039;
+          marks={levels}
+        /&gt;
+      &lt;/FormControl&gt;
+      &lt;FormControl component=&#039;fieldset&#039; classes={{ root: classes.formControl }}&gt;
+        &lt;FormLabel component=&#039;legend&#039; classes={{ root: classes.formLabel }}&gt;
+          A Hard-Working Student?
+        &lt;/FormLabel&gt;
+        &lt;Slider
+          defaultValue={value.studious}
+          onChangeCommitted={(event, num) =&gt; {
+            const obj = { target: { name: &#039;studious&#039;, value: num } };
+            onChange(obj);
+          }}
+          getAriaValueText={valuetext}
+          aria-labelledby=&#039;discrete-slider-custom&#039;
+          step={25}
+          valueLabelDisplay=&#039;off&#039;
+          marks={levels}
+        /&gt;
+      &lt;/FormControl&gt;
+    &lt;/InfoContainer&gt;
+  );
+}
+</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
