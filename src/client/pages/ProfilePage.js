@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import { DELETE_USER } from '../utils/gqlQueries';
 import { useMutation } from '@apollo/react-hooks';
 
+/* Create custom styles for ProfilePage */
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -31,6 +32,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+/* Selection types */
 const levels = {
   0: '⭐',
   25: '⭐⭐',
@@ -39,6 +41,7 @@ const levels = {
   100: '⭐⭐⭐⭐⭐'
 };
 
+/* Word-mapping descriptors */
 const keyMaps = {
   schedule: 'Night Owl',
   cleanliness: 'Cleanliness',
@@ -51,11 +54,17 @@ const isNull = obj => {
 };
 
 const Profile = () => {
+  /* Implement userContext and deleteUser mutation hooks */
   const [user, setUser] = useContext(UserContext);
   const [deleteUser] = useMutation(DELETE_USER);
+
+  /* Implement redirect state */
   const [redirect, setRedirect] = React.useState(false);
 
+  /* Define custom styling */
   const classes = useStyles();
+
+  /* Reduce user-info using Higher-Order Function to retrieve relevant fields */
   const relevant = Object.keys(user).reduce((object, key) => {
     if (
       key !== 'loading' &&
@@ -68,8 +77,10 @@ const Profile = () => {
     return object;
   }, {});
 
+  /* Check for complete profile */
   if (!user.isComplete) return <Redirect to='/register' />;
 
+  /* Display alert before confirming profile deletion */
   const deleteAccount = () => {
     if (confirm('Are you sure?')) {
       deleteUser({ variables: { sid: user.sid } });
@@ -78,8 +89,10 @@ const Profile = () => {
     }
   };
 
+  /* Redirect to logout route if logout button is clicked */
   if (redirect === true) return <Redirect to='/auth/logout' />;
 
+  /* Render user avatar, and user information list */
   return (
     <div>
       <Typography variant='h6' classes={{ root: classes.title }}>

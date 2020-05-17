@@ -1,3 +1,4 @@
+# Define Student Type and its fields for Neo4j
 type Student {
   sid: String!
   name: String
@@ -8,17 +9,21 @@ type Student {
   matched: [Student] @relation(name: "MATCHED", direction: "BOTH")
 }
 
+# Define Trait type and its fields
 type Trait {
   name: ID!
   studentTraits: [HasTrait]
 }
 
+# Define Neo4j relationship between Student and Trait Node, with associated strength value
 type HasTrait @relation(name: "HAS_TRAIT") {
   from: Student
   to: Trait
   strength: Int!
 }
 
+# Define custom Neo4j queries, such as stuent by substring (for incomplete search functionality)
+# As well as similar for K-Nearest-Neighbors
 type Query {
   studentBySubstring(substring: String): [Student]
     @cypher(
@@ -36,6 +41,7 @@ type Query {
     )
 }
 
+# Define custom mutations (POST/UPDATE/DELETE) requests for Neo4j Student nodes
 type Mutation {
   updateAgain(sid: String): Int
     @cypher(

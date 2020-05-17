@@ -1,6 +1,7 @@
 const neo4j = require('neo4j-driver');
 const { students, traits } = require('./constants');
 
+/* Connect to Neo4j database using environment variables */
 const driver = neo4j.driver(
   process.env.NEO4J_URI || 'bolt://localhost:7687',
   neo4j.auth.basic(
@@ -9,7 +10,7 @@ const driver = neo4j.driver(
   )
 );
 
-// clear all nodes and relationships
+/* Create dummy data (nodes, edges, relationships) for Neo4j */
 const session = driver.session();
 session.run('MATCH (n) DETACH DELETE n;').then(() => {
   session

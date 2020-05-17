@@ -1,6 +1,10 @@
-// import typeface 'Roboto' from Google CDN
+// Global styling for LandingPage and AboutUs page
+// All other styling handled by Material UI hooks
+
+// Import typeface 'Roboto' from Google CDN
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
+// Global styling for background color in between pages
 :root {
   background-color: #cccccc;
 }
@@ -79,6 +83,7 @@ p.subtitle {
   word-break: break-all;
 }
 
+// Calls sign-inIn for drop down effect
 #sign-in {
   object-fit: fill;
   width: 100%;
@@ -87,6 +92,7 @@ p.subtitle {
   opacity: 0;
 }
 
+// Keyframe definition for sign-inIn
 @keyframes sign-inIn {
   from {
     transform: translateY(-30px);

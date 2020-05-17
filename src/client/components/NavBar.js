@@ -1,29 +1,22 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 import { fade, withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Avatar from '@material-ui/core/Avatar';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import InfoIcon from '@material-ui/icons/Info';
 import HomeIcon from '@material-ui/icons/Home';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import { UserContext } from '../contexts/UserProvider';
 import avatar from '../../../public/avatar.jpg';
-import Redirect from 'react-router-dom/es/Redirect';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 
+/* Custom transparentAppBar component */
 const transparentAppBar = withStyles({
   root: {
     background: 'transparent',
@@ -31,6 +24,7 @@ const transparentAppBar = withStyles({
   }
 })(AppBar);
 
+/* More custom styling for NavBar */
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1
@@ -96,21 +90,28 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar() {
+  /* Define custom styles for Navigation Bar */
   const classes = useStyles();
+
+  /* Implement anchor elements for mobile friendly hamburger menu */
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [user, setUser] = useContext(UserContext);
 
+  /* Handle mobile viewport hamburger menu */
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  /* MobileMenuClose handler */
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
+  /* MobileMenuOpen handler */
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  /* Render menu for desktop viewport */
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -122,6 +123,7 @@ export default function NavBar() {
     />
   );
 
+  /* Render menu for mobile viewport */
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -172,6 +174,7 @@ export default function NavBar() {
     </Menu>
   );
 
+  /* Use conditional rendering to hide profile tab if not logged in, alongside other irrelevant information */
   return (
     <div className={classes.grow}>
       <transparentAppBar position='static'>

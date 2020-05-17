@@ -4,6 +4,7 @@ const neo4jTypeDefs = require('./neo4jTypeDefs');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 
+/* Create GraphQL schema based off neo4jTypeDefs */
 const neo4jSchema = makeAugmentedSchema({
   typeDefs: neo4jTypeDefs,
   config: {
@@ -16,11 +17,13 @@ const neo4jSchema = makeAugmentedSchema({
   }
 });
 
+/* Merge Neo4j schema with MySQL schema together */
 const restSchema = makeExecutableSchema({
   typeDefs,
   resolvers
 });
 
+/* Return combination of both schemas, allowing for access to both databases from one route */
 const mergedSchema = mergeSchemas({
   subschemas: [{ schema: neo4jSchema }, { schema: restSchema }]
 });

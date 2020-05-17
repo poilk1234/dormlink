@@ -1,5 +1,12 @@
 # DormLink
 
+## For TAs/Graders
+
+- This app is NOT bootstrapped with Create-React-App. We manually configured Webpack and Express to allow for this combined and modularized file structure
+- Check `webpack.config.js` to see how we bundle our JSX and ES6, CSS and SCSS, and images and SVGs. See `src/server/server.js` for how we serve them to the client
+- We also set up ESLint and prettier, whilst following AirBnB's style guide to maintain best JavaScript coding practices
+- A `.env` file is required to successfully build this project on your own system. Please don't hesitate to ask us for it if you are missing it.
+
 ## Installation
 
 - This guide assumes you have a basic competence with a command line tool like Terminal. If you need to learn more, click [here](https://www.davidbaumgold.com/tutorials/command-line/).
@@ -29,6 +36,7 @@
 - Install [Node.js](https://nodejs.org/en/download/).
 - Run `node --version` and make sure it's `v12.10.0` or higher.
 - Run `npm --version` and make sure it's `6.13.1` or higher.
+- Note: you may need to downgrade node on Windows machines (there have been issues with Node on Windows in general).
 
 #### Running DormLink on `localhost`
 

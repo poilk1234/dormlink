@@ -1,12 +1,14 @@
 const Hostel = require('../models').hostel;
 const User = require('../models').user;
 
+/* Create dummy data (hostels, MySQL) */
 exports.createHostels = hostelInfo => {
   hostelInfo.forEach(hostel => {
     Hostel.create({ id: hostel.name, affiliation: hostel.affiliation });
   });
 };
 
+/* Create dummy data (users, MySQL) */
 exports.createUsers = userInfo => {
   userInfo.forEach(user => {
     User.create({

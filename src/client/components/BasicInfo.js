@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { hostelInfo as options } from '../utils/constants';
 
+/* Custom container for BasicInfo selection component */
 const InfoContainer = withStyles({
   root: {
     justifyContent: 'center',
@@ -22,6 +23,7 @@ const InfoContainer = withStyles({
   }
 })(Container);
 
+/* Custom styles for BasicInfo selection component */
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(3),
@@ -49,9 +51,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+/* BasicInfo form can be passed values for initial and updated state and onChange function */
+/* This allows shared state between this component and its parent, RegistrationPage.js */
 export default function RadioButtonsGroup({ value, onChange, child }) {
   const classes = useStyles();
 
+  /* Render form with Radio groups for basic info properties */
+  /* Gender, Age, Hostel */
   return (
     <InfoContainer maxWidth='xl'>
       <FormControl component='fieldset' classes={{ root: classes.formControl }}>

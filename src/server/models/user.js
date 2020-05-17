@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+  /* Define user with primary key sid and other fields */
   const User = sequelize.define(
     'user',
     {
@@ -45,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  /* Define one-to-one relationship between User and Hostel tables */
   User.associate = models => {
     User.belongsTo(models.hostel);
   };

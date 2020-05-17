@@ -6,6 +6,7 @@ import kilong from '../../../public/kilong.jpg';
 import leon from '../../../public/leon.jpg';
 import algo from '../../../public/algo.png';
 
+/* Non-MUI JSX for AboutUs page with styles in global styles.scss file */
 const AboutPage = () => {
   return (
     <div>

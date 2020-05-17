@@ -1,28 +1,19 @@
 import React, { useContext, useState } from 'react';
+import Redirect from 'react-router-dom/es/Redirect';
 import { useQuery } from '@apollo/react-hooks';
-import { SIMILAR, USER_SID } from '../utils/gqlQueries';
-import { UserContext } from '../contexts/UserProvider';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import { Divider } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { red } from '@material-ui/core/colors';
-import avatar from '../../../public/avatar.jpg';
-import Redirect from 'react-router-dom/es/Redirect';
+import { SIMILAR, USER_SID } from '../utils/gqlQueries';
+import { UserContext } from '../contexts/UserProvider';
 
+/* Create custom styles for SimilarUser cards */
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 320,
@@ -41,6 +32,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+/* Selection types */
 const levels = {
   0: '⭐',
   25: '⭐⭐',
@@ -50,26 +42,37 @@ const levels = {
 };
 
 const UserCard = props => {
+  /* Define custom styles */
   const classes = useStyles();
+
+  /* Implement local redirect state */
   const [redirect, setRedirect] = useState(false);
+
+  /* Implement local redirectUrl state */
   const [redirectUrl, setRedirectUrl] = useState('');
+
+  /* Call GraphQL server for user information */
   const { data, error, loading } = useQuery(USER_SID, {
     variables: { sid: props.sid }
   });
 
+  /* Handle redirect to more detailed user view */
   if (redirect) {
     return <Redirect to={redirectUrl} />;
   }
 
+  /* Handle click to view profile */
   const handleClickViewProfile = () => {
     setRedirect(true);
     setRedirectUrl('/user/' + props.sid);
   };
 
+  /* Handle GraphQL server return types */
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   if (!data) return <p>Not found</p>;
 
+  /* Render card for individual user */
   return (
     <div>
       <Card className={classes.card}>
@@ -114,16 +117,21 @@ const UserCard = props => {
   );
 };
 
+/* Default export is Map of cards for all K-Nearest-Neighbors of logged-in user */
 export default () => {
   const [user, setUser] = useContext(UserContext);
+
+  /* Fetch sid for every recommended roommate (KNN) */
   const { loading, error, data } = useQuery(SIMILAR, {
     variables: { sid: user.sid, hostel: user.hostelId }
   });
 
+  /* Handle GraphQL return types */
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   if (!data) return <p>Not found</p>;
 
+  /* Iterate through every recommended user and generate UserCard for them */
   const userCards = data.similar.map(({ sid, age, gender }) => (
     <UserCard key={sid} sid={sid} gender={gender} age={age} />
   ));

@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+  /* Define Hostel table with primary key ID, and other fields */
   const Hostel = sequelize.define(
     'hostel',
     {
@@ -17,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  /* Define one-to-many relationship between Hostel and Student tables */
   Hostel.associate = models => {
     Hostel.hasMany(models.user);
   };

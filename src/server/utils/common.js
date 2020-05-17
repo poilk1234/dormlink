@@ -1,3 +1,4 @@
+/* Use RegEx to match email address returned from Microsoft Graph API */
 exports.validateEmail = profile => {
   return (
     profile &&
@@ -8,6 +9,7 @@ exports.validateEmail = profile => {
   );
 };
 
+/* Use RegEx and other helper functions to parse sid, first, last, email from Azure profile */
 exports.extractAzureProfile = profile => {
   const { preferred_username: email, name: fullName } = profile._json;
   const sid = email.match(/[^@]+/)[0];
@@ -19,6 +21,7 @@ exports.extractAzureProfile = profile => {
   return { sid, firstName, lastName, email };
 };
 
+/* Middleware to check for logged-in user session */
 exports.isAuthenticated = (req, res, next) => {
   if (req.user) return next();
   return res.status(401).json({
@@ -26,6 +29,7 @@ exports.isAuthenticated = (req, res, next) => {
   });
 };
 
+/* Middleware to check for completed-profile user session */
 exports.isCompleteAuthenticated = (req, res, next) => {
   if (req.user && req.user.isComplete) return next();
   return res.status(401).json({

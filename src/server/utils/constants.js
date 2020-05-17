@@ -1,4 +1,5 @@
 exports.traits = ['cleanliness', 'participation', 'schedule', 'studious'];
+/* Dummy data for demonstration/testing */
 exports.students = [
   {
     hostel: 'PMHC High Block',
@@ -81,6 +82,7 @@ exports.students = [
     participation: 50
   }
 ];
+
 exports.hostelInfo = [
   // CC
   { name: 'PMHC High Block', affiliation: 'Chung Chi' },

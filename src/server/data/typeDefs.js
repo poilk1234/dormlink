@@ -1,5 +1,6 @@
 const { gql } = require('apollo-server-express');
 
+/* Define GraphQL schema according to MySQL database design */
 const typeDefs = gql`
   type User {
     sid: ID!

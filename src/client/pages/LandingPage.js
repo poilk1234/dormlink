@@ -7,6 +7,8 @@ import Logo from '../../../public/logo.png';
 import SignIn from '../../../public/sign-in.png';
 import LoginButton from '../components/LoginButton';
 import { UserContext } from '../contexts/UserProvider';
+
+/* Define custom container component for LandingPage with DormLink company branding and images */
 const LandingContainer = withStyles({
   root: {
     height: '100vh',
@@ -16,6 +18,7 @@ const LandingContainer = withStyles({
   }
 })(Container);
 
+/* Non-MUI JSX with custom styles in global styles.scss file */
 const LandingPage = () => {
   return (
     <LandingContainer maxWidth='xl'>

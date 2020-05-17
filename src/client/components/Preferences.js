@@ -5,6 +5,7 @@ import Slider from '@material-ui/core/Slider';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+/* Custom container component for Preference selection component */
 const InfoContainer = withStyles({
   root: {
     justifyContent: 'center',
@@ -15,6 +16,7 @@ const InfoContainer = withStyles({
   }
 })(Container);
 
+/* Custom styles for Preference selection component */
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(3),
@@ -34,6 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+/* Mappings between values and descriptors */
 const levels = [
   {
     value: 0,
@@ -61,9 +64,13 @@ function valuetext(value) {
   return `${value}`;
 }
 
+/* Preferences component can be passed initial and changed values and onChange function */
+/* onChange allows for updated values to be passed to parent form in RegistrationPage.js */
 export default function RadioButtonsGroup({ value, onChange }) {
   const classes = useStyles();
 
+  /* Render custom form with slider for each preference */
+  /* Pass every change to parent form */
   return (
     <InfoContainer maxWidth='xl'>
       <FormControl component='fieldset' classes={{ root: classes.formControl }}>
